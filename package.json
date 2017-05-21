@@ -1,7 +1,7 @@
 {
   "name": "gtrans-plugin-helper",
   "version": "0.0.8",
-  "description": "A minimalistic helper for building your own custom-styled translation plugin based Google Translate.",
+  "description": "A simple helper for building your own custom-styled translation widget based on Google Translate.",
   "main": "dist/index.js",
   "repository": {
     "type": "git",
