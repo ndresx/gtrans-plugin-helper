@@ -1,0 +1,9 @@
+dist/
+node_modules/
+coverage/
+examples/
+*.DS_Store
+*.log
+*.idea
+*.vscode
+jsconfig.json
