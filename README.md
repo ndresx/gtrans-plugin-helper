@@ -131,8 +131,8 @@ If your domain or path configuration requires a change in how the language cooki
 
 |Name|Type|Default|Description|
 |:--|:--:|:-----:|:----------|
-|[**cookieDomain**](#cookiedomain)|`string`|`null`|The `domain` which is used for the cookie creation|
-|[**cookiePath**](#cookiepath)|`string`|`null`|The `path` which is used for the cookie creation|
+|**cookieDomain**|`string`|`null`|The `domain` which is used for the cookie creation|
+|**cookiePath**|`string`|`null`|The `path` which is used for the cookie creation|
 
 ## License
 
