@@ -88,9 +88,9 @@ Array.prototype.forEach.call(document.querySelectorAll('a[data-lang]'), function
     e.preventDefault();
     api.setLanguage(el.dataset.lang);
   });
-})
+});
 ```
-Or here with jQuery:
+Here with jQuery:
 ```js
 $('a[data-lang]').click(function (e) {
   e.preventDefault();
