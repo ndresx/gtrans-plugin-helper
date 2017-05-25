@@ -1,5 +1,10 @@
 // eslint-disable-next-line
 !(function() {
+  // eslint-disable-next-line
+  if (window.__GTRANSPLUGINHELPER__) {
+    return;
+  }
+
   let pageLanguage = null;
   let currentLanguage = null;
   let targetLanguage = null;
@@ -7,12 +12,11 @@
   let observeInterval = null;
   let onChangeTimeout = null;
 
-  const googtransRegex = /googtrans=\/([a-z-]+)\/([a-z-]+)/i;
+  const googtransRegEx = /googtrans=\/([a-z-]+)\/([a-z-]+)/i;
   let gPluginOptions = null;
   let gPluginEl = null;
 
   const options = {
-    cookieDays: 7,
     cookieDomain: null,
     cookiePath: null,
     onChange: null,
@@ -30,7 +34,7 @@
   }
 
   function updateTargetLanguage() {
-    const match = document.cookie.match(googtransRegex);
+    const match = document.cookie.match(googtransRegEx);
 
     if (match && match[1] !== match[2] && pageLanguage !== match[2]) {
       targetLanguage = match[2];
@@ -50,7 +54,7 @@
     });
   }
 
-  function getBanner() {
+  function getBannerFrame() {
     return document.querySelector('.goog-te-banner-frame');
   }
 
@@ -77,7 +81,7 @@
     if (loading || !language || targetLanguage === language) return;
 
     // Use existing banner for changing the language
-    const banner = getBanner();
+    const banner = getBannerFrame();
     const iFrame =
       (!gPluginEl || (banner && banner.offsetHeight)) &&
       document.querySelector('.goog-te-menu-frame');
@@ -101,14 +105,11 @@
       cleanUp();
     }
 
-    // Set new language cookie to be picked up by the re-initialization process
-    const today = new Date();
-    const expire = new Date();
+    // Set new language cookie to get picked up by the re-initialization process
     const cookieDomain = options.cookieDomain ? `;domain=${options.cookieDomain}` : '';
-    const cookiePath = options.cookiePath ? `;domain=${options.cookiePath}` : '';
+    const cookiePath = options.cookiePath ? `;path=${options.cookiePath}` : '';
 
-    expire.setTime(today.getTime() + 86400000 * options.cookieDays);
-    document.cookie = `googtrans=/${pageLanguage}/${language};expires=${expire.toUTCString()}${cookieDomain}${cookiePath}`;
+    document.cookie = `googtrans=/${pageLanguage}/${language}${cookieDomain}${cookiePath}`;
 
     // Re-initialize Google Translate
     loadGoogleTranslate();
@@ -118,7 +119,7 @@
     onChange();
 
     if (!targetLanguage) {
-      const banner = getBanner();
+      const banner = getBannerFrame();
 
       if (!(banner || banner.offsetHeight)) {
         cleanUp(!gPluginEl);
@@ -129,7 +130,7 @@
   function observe() {
     clearInterval(observeInterval);
     const checkStatus = () => {
-      const banner = getBanner();
+      const banner = getBannerFrame();
 
       if (banner) {
         onChange();
@@ -139,6 +140,7 @@
         const elements = [banner, ...document.querySelectorAll('.goog-te-menu-frame')];
         elements.forEach(el => {
           const contents = el.contentDocument || el.contentWindow.document;
+          contents.removeEventListener('click', onElementClick);
           contents.addEventListener('click', onElementClick);
         });
 
@@ -167,7 +169,7 @@
 
     updateTargetLanguage();
 
-    if (targetLanguage || gPluginEl || window.location.hash.match(googtransRegex)) {
+    if (targetLanguage || gPluginEl || window.location.hash.match(googtransRegEx)) {
       loadGoogleTranslate();
     }
 
