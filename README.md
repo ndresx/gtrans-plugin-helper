@@ -1,4 +1,4 @@
-# gtrans-plugin-helper
+# gtrans-plugin-helper [![Build Status](https://travis-ci.org/ndresx/gtrans-plugin-helper.svg?branch=master)](https://travis-ci.org/ndresx/gtrans-plugin-helper) [![Coverage Status](https://coveralls.io/repos/github/ndresx/gtrans-plugin-helper/badge.svg?branch=master)](https://coveralls.io/github/ndresx/gtrans-plugin-helper?branch=master)
 A simple helper for building your own custom-styled translation widget based on Google Translate.
 
 * [Getting Started](#getting-started)
@@ -60,9 +60,16 @@ function onSelectChange(options) {
 
 The website widget provided by Google Translate is nice and easy to use. However, if you have plans to use your own styles or components to change the language with help of Google Translate, you will quickly notice that there are some limitations.
 
-Because it was interesting to see how Google Translate works in the first place, the here presented `gtrans-plugin-helper` allows you to create your own custom-styled component, no matter if it's consisting of simple links,  a form select, or language flag icons. It's completely up to you in which way you want to allow users changing the language on your page.
+Because it was interesting to see how Google Translate works in the first place, the here presented `gtrans-plugin-helper` allows you to create your own custom-styled component, no matter if it's consisting of simple links, a form select, or language flag icons. It's completely up to you in which way you want to allow users changing the language on your page.
 
 ## Examples
+
+### Demo
+You can run a local demo of several examples by cloning the repo and running the following commands.
+```
+yarn
+yarn start
+```
 
 ### Links
 In the [Getting Started](#getting-started) section we have used our own select to change the language, but how would it work with links? Very similar if you look at the following example.
@@ -114,13 +121,13 @@ The `getLanguage` function returns the current `language` of Google Translate.
 |Name|Type|Default|Description|
 |:--|:--:|:-----:|:----------|
 |[**onChange**](#onchange) |`function`|`null`|Handler that's called when the language is changed|
-|[**idSelector**](#idselector)|`string`|`google_translate_element`|id selector of the original widget|
+|[**widgetId**](#widgetid)|`string`|`google_translate_element`|id of the original widget|
 
 ### `onChange`
 The `onChange` callback is recommended to use in order to update your UI accordingly. It will be called every time the `language` of Google Translate changes and receives it as first argument.
 
-### `idSelector`
-Although this helper's purpose is it to allow you to create your own frontend component, you can still use the original widget and/or in combination with a custom language picker. You could either specify your own id selector for the element wrapper, or leave the default value of `google_translate_element`.
+### `widgetId`
+Although this helper's purpose is it to allow you to create your own frontend component, you can still use the original widget and/or in combination with a custom language picker. You could either specify your own id for the element wrapper, or leave the default value of `google_translate_element`.
 
 ```html
 <div id="google_translate_element"></div>
@@ -138,5 +145,5 @@ If your domain or path configuration requires a change in how the language cooki
 
 MIT
 
-[npm]: https://img.shields.io/npm/v/react-countdown-now.svg
-[npm-url]: https://npmjs.com/package/react-countdown-now
+[npm]: https://img.shields.io/npm/v/gtrans-plugin-helper.svg
+[npm-url]: https://npmjs.com/package/gtrans-plugin-helper

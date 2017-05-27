@@ -20,7 +20,7 @@
     cookieDomain: null,
     cookiePath: null,
     onChange: null,
-    idSelector: 'google_translate_element',
+    widgetId: 'google_translate_element',
   };
 
   function loadGoogleTranslate() {
@@ -138,6 +138,10 @@
 
         // Observe interactions with relevant items, no matter what kind of interaction it is
         const elements = [banner, ...document.querySelectorAll('.goog-te-menu-frame')];
+
+        banner.removeEventListener('click', onElementClick);
+        banner.addEventListener('click', onElementClick);
+
         elements.forEach(el => {
           const contents = el.contentDocument || el.contentWindow.document;
           contents.removeEventListener('click', onElementClick);
@@ -150,7 +154,7 @@
           const select = gPluginEl.querySelector('select');
 
           if (select) {
-            select.removeEventListener('click', onElementClick);
+            select.removeEventListener('change', onElementClick);
             select.addEventListener('change', onElementClick);
           }
         }
@@ -163,7 +167,7 @@
   function init(plugin, opts) {
     Object.assign(options, opts);
     gPluginOptions = plugin;
-    gPluginEl = document.querySelector(`#${options.idSelector}`);
+    gPluginEl = document.querySelector(`#${options.widgetId}`);
     pageLanguage =
       gPluginOptions.pageLanguage || document.documentElement.getAttribute('lang').split('-')[0];
 
@@ -189,7 +193,7 @@
     });
 
     gOptions.layout = layout;
-    new google.translate.TranslateElement(gOptions, options.idSelector); // eslint-disable-line
+    new google.translate.TranslateElement(gOptions, options.widgetId); // eslint-disable-line
     observe();
   }
 

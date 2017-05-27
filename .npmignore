@@ -1,6 +1,7 @@
 src/
 node_modules/
 coverage/
+examples/
 *.babelrc
 *.eslintrc
 *.editorconfig

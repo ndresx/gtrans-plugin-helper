@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <title>Example</title>
+</head>
+
+<body>
+  <h1 class="notranslate">gtrans-plugin-helper</h1>
+  A simple helper for building your own custom-styled translation widget based on Google Translate.
+  <h2>Original Select</h2>
+  <div id="google_translate_element"></div>
+  <h2>Custom</h2>
+  Selected language: <strong id="selected-language" class="notranslate"></strong>
+  <h3>Select</h3>
+  <select id="language-select" onchange="onChange(this.options)">
+    <option class="notranslate" value="de">Deutsch</option>
+    <option class="notranslate" value="en">English</option>
+    <option class="notranslate" value="fr">Français</option>
+    <option class="notranslate" value="it">Italiano</option>
+    <option class="notranslate" value="es">Español</option>
+  </select>
+  <h3>Links</h3>
+  <ul>
+    <li><a class="notranslate" data-lang="de" href="#">Deutsch</a></li>
+    <li><a class="notranslate" data-lang="en" href="#">English</a></li>
+    <li><a class="notranslate" data-lang="fr" href="#">Français</a></li>
+    <li><a class="notranslate" data-lang="it" href="#">Italiano</a></li>
+    <li><a class="notranslate" data-lang="es" href="#">Español</a></li>
+  </ul>
+  <h3>Flags</h3>
+  <ul>
+    <li>
+      <a class="notranslate" data-lang="de" href="#"><img src="img/flags/de.png" alt="Deutsch" /></a>
+    </li>
+    <li>
+      <a class="notranslate" data-lang="en" href="#"><img src="img/flags/us.png" alt="English" /></a>
+    </li>
+    <li>
+      <a class="notranslate" data-lang="fr" href="#"><img src="img/flags/fr.png" alt="Français" /></a>
+    </li>
+    <li>
+      <a class="notranslate" data-lang="it" href="#"><img src="img/flags/it.png" alt="Italiano" /></a>
+    </li>
+    <li>
+      <a class="notranslate" data-lang="es" href="#"><img src="img/flags/es.png" alt="Español" /></a>
+    </li>
+  </ul>
+  <script src="js/bundle.js "></script>
+  <script>
+    var api = __GTRANSPLUGINHELPER__.init(
+      {
+        pageLanguage: 'en',
+        includedLanguages: 'en,de,fr,it,es',
+        layout: 'google.translate.TranslateElement.InlineLayout.HORIZONTAL',
+        multilanguagePage: true
+      }, {
+        onChange: function (language) {
+          document.getElementById('selected-language').innerHTML = language;
+          document.getElementById('language-select').value = language;
+        }
+      });
+
+    // Selected language
+    document.getElementById('selected-language').innerHTML = api.getLanguage();
+
+    // Select
+    function onChange(options) {
+      api.setLanguage(options[options.selectedIndex].value);
+    }
+
+    // Links
+    Array.prototype.forEach.call(document.querySelectorAll('a[data-lang]'), function (el) {
+      el.addEventListener('click', function (e) {
+        e.preventDefault();
+        api.setLanguage(el.dataset.lang);
+      });
+    });
+  </script>
+</body>
+
+</html>
