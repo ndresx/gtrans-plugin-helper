@@ -12,7 +12,7 @@
   let observeInterval = null;
   let onChangeTimeout = null;
 
-  const googtransRegEx = /googtrans=\/([a-z-]+)\/([a-z-]+)/i;
+  const googtransRegEx = /googtrans=?[/(]([a-z-]+)[/|]([a-z-]+)/i;
   let gPluginOptions = null;
   let gPluginEl = null;
 

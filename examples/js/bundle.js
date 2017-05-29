@@ -3683,7 +3683,7 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
   var observeInterval = null;
   var onChangeTimeout = null;
 
-  var googtransRegEx = /googtrans=\/([a-z-]+)\/([a-z-]+)/i;
+  var googtransRegEx = /googtrans=?[/(]([a-z-]+)[/|]([a-z-]+)/i;
   var gPluginOptions = null;
   var gPluginEl = null;
 
