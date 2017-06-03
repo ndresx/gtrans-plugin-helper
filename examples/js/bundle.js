@@ -3755,8 +3755,7 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
     var iFrame = (!gPluginEl || banner && banner.offsetHeight) && document.querySelector('.goog-te-menu-frame');
 
     if (iFrame) {
-      var contents = iFrame.contentDocument || iFrame.contentWindow.document;
-      var found = [].concat(_toConsumableArray(contents.querySelectorAll('a'))).filter(function (node) {
+      var found = [].concat(_toConsumableArray(iFrame.contentDocument.querySelectorAll('a'))).filter(function (node) {
         if (node.value === language) {
           node.click();
           onChange();
@@ -3789,7 +3788,7 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
     if (!targetLanguage) {
       var banner = getBannerFrame();
 
-      if (!(banner || banner.offsetHeight)) {
+      if (!(banner && banner.offsetHeight)) {
         cleanUp(!gPluginEl);
       }
     }
@@ -3811,7 +3810,7 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
         banner.addEventListener('click', onElementClick);
 
         elements.forEach(function (el) {
-          var contents = el.contentDocument || el.contentWindow.document;
+          var contents = el.contentDocument;
           contents.removeEventListener('click', onElementClick);
           contents.addEventListener('click', onElementClick);
         });

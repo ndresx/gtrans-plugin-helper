@@ -66,6 +66,8 @@
     document.getElementById('selected-language').innerHTML = api.getLanguage();
 
     // Select
+    document.getElementById('language-select').value = api.getLanguage();
+
     function onChange(options) {
       api.setLanguage(options[options.selectedIndex].value);
     }
