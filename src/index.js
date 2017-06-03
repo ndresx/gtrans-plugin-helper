@@ -87,8 +87,7 @@
       document.querySelector('.goog-te-menu-frame');
 
     if (iFrame) {
-      const contents = iFrame.contentDocument || iFrame.contentWindow.document;
-      const found = [...contents.querySelectorAll('a')].filter(node => {
+      const found = [...iFrame.contentDocument.querySelectorAll('a')].filter(node => {
         if (node.value === language) {
           node.click();
           onChange();
@@ -121,7 +120,7 @@
     if (!targetLanguage) {
       const banner = getBannerFrame();
 
-      if (!(banner || banner.offsetHeight)) {
+      if (!(banner && banner.offsetHeight)) {
         cleanUp(!gPluginEl);
       }
     }
@@ -143,7 +142,7 @@
         banner.addEventListener('click', onElementClick);
 
         elements.forEach(el => {
-          const contents = el.contentDocument || el.contentWindow.document;
+          const contents = el.contentDocument;
           contents.removeEventListener('click', onElementClick);
           contents.addEventListener('click', onElementClick);
         });
