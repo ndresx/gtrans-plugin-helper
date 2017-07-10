@@ -87,15 +87,18 @@
       document.querySelector('.goog-te-menu-frame');
 
     if (iFrame) {
-      const found = [...iFrame.contentDocument.querySelectorAll('a')].filter(node => {
-        if (node.value === language) {
-          node.click();
-          onChange();
-          return true;
-        }
+      const links = iFrame.contentDocument.querySelectorAll('a');
+      const found =
+        links.length &&
+        [...iFrame.contentDocument.querySelectorAll('a')].filter(node => {
+          if (node.value === language) {
+            node.click();
+            onChange();
+            return true;
+          }
 
-        return false;
-      });
+          return false;
+        });
 
       if (found) return;
     }
@@ -188,7 +191,7 @@
 
     // Restore original layout value from string
     gOptions.layout.split('.').forEach(el => {
-      if (layout[el]) layout = layout[el];
+      layout = layout[el];
     });
 
     gOptions.layout = layout;

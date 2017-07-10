@@ -3755,7 +3755,8 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
     var iFrame = (!gPluginEl || banner && banner.offsetHeight) && document.querySelector('.goog-te-menu-frame');
 
     if (iFrame) {
-      var found = [].concat(_toConsumableArray(iFrame.contentDocument.querySelectorAll('a'))).filter(function (node) {
+      var links = iFrame.contentDocument.querySelectorAll('a');
+      var found = links.length && [].concat(_toConsumableArray(iFrame.contentDocument.querySelectorAll('a'))).filter(function (node) {
         if (node.value === language) {
           node.click();
           onChange();
@@ -3855,7 +3856,7 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 
     // Restore original layout value from string
     gOptions.layout.split('.').forEach(function (el) {
-      if (layout[el]) layout = layout[el];
+      layout = layout[el];
     });
 
     gOptions.layout = layout;

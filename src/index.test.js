@@ -8,12 +8,16 @@ const gtwSnippetDefaults = {
 const widgetId = 'google_translate_element';
 
 function init() {
-  /* eslint-disable */
+  // eslint-disable-next-line
   require('./index.js');
-  /* eslint-enable */
 }
 
-function mockGoogleTranslateCall() {
+function getGlobalHelper() {
+  // eslint-disable-next-line
+  return global.__GTRANSPLUGINHELPER__;
+}
+
+function simulateGoogleTranslateCall() {
   const google = {
     translate: {
       TranslateElement() {},
@@ -25,6 +29,8 @@ function mockGoogleTranslateCall() {
   };
 
   global.google = google;
+
+  getGlobalHelper().initElement();
 }
 
 function injectOriginalWidget(id = widgetId) {
@@ -70,11 +76,6 @@ function getBannerFrame() {
   return document.querySelector('.goog-te-banner-frame');
 }
 
-function getGlobalHelper() {
-  // eslint-disable-next-line
-  return global.__GTRANSPLUGINHELPER__;
-}
-
 describe('gtrans-plugin-helper', () => {
   jest.useFakeTimers();
 
@@ -91,31 +92,47 @@ describe('gtrans-plugin-helper', () => {
     injectOriginalWidget();
     const widget = document.querySelector(`#${widgetId}`);
     expect(widget.childNodes.length).toBeTruthy();
-    getGlobalHelper().init(gtwSnippetDefaults);
-    mockGoogleTranslateCall();
-    getGlobalHelper().initElement();
+
+    const onChange = jest.fn();
+    getGlobalHelper().init(gtwSnippetDefaults, { onChange });
+
+    simulateGoogleTranslateCall();
+
     expect(widget).toBeTruthy();
     expect(widget.childNodes.length).toBeFalsy();
 
     injectWidgetElements();
     injectOriginalWidget();
-    expect(getBannerFrame()).toBeTruthy();
+    const bannerFrame = getBannerFrame();
+    expect(bannerFrame).toBeTruthy();
     jest.runTimersToTime(250);
+    expect(onChange).toBeCalledWith('en');
+    expect(onChange.mock.calls.length).toBe(1);
+
+    // Should not call onChange if the language stays the same
+    bannerFrame.click();
+    jest.runTimersToTime(0);
+    expect(onChange.mock.calls.length).toBe(1);
 
     expect(getGlobalHelper().getLanguage()).toBe('en');
     getGlobalHelper().setLanguage('fr');
     expect(getGlobalHelper().getLanguage()).toBe('fr');
 
-    // const banner = getBannerFrame();
-    // banner.click();
-    // jest.runTimersToTime(0);
+    jest.runTimersToTime(0);
+    expect(onChange).toBeCalledWith('fr');
+    expect(onChange.mock.calls.length).toBe(2);
+    getGlobalHelper().setLanguage('fr');
   });
 
   it('should load Google Translate if widget elements are not present when setting the language', () => {
     init();
     getGlobalHelper().init(gtwSnippetDefaults);
-    mockGoogleTranslateCall();
-    getGlobalHelper().initElement();
+
+    // Skip setLanguage call if not fully loaded
+    expect(getGlobalHelper().setLanguage('es')).toBeUndefined();
+    expect(getGlobalHelper().getLanguage()).toBe('en');
+
+    simulateGoogleTranslateCall();
 
     injectWidgetElements(true, false);
     expect(getBannerFrame()).toBeTruthy();
@@ -123,13 +140,10 @@ describe('gtrans-plugin-helper', () => {
 
     document.body.appendChild = jest.fn();
     expect(getGlobalHelper().getLanguage()).toBe('en');
+
     getGlobalHelper().setLanguage('fr');
     expect(document.body.appendChild.mock.calls.length).toBe(1);
     expect(getGlobalHelper().getLanguage()).toBe('fr');
-
-    // const banner = getBannerFrame();
-    // banner.click();
-    // jest.runTimersToTime(0);
   });
 
   it('should pick pageLanguage from <html> tag and load Google Translate', () => {
@@ -144,8 +158,7 @@ describe('gtrans-plugin-helper', () => {
       cookiePath: '/',
     });
 
-    mockGoogleTranslateCall();
-    getGlobalHelper().initElement();
+    simulateGoogleTranslateCall();
 
     injectWidgetElements();
     injectOriginalWidget();
