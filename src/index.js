@@ -33,8 +33,12 @@
     }
   }
 
+  function matchCookie() {
+    return document.cookie.match(googtransRegEx);
+  }
+
   function updateTargetLanguage() {
-    const match = document.cookie.match(googtransRegEx);
+    const match = matchCookie();
 
     if (match && match[1] !== match[2] && pageLanguage !== match[2]) {
       targetLanguage = match[2];
@@ -136,7 +140,7 @@
 
       if (banner) {
         onChange();
-        clearInterval(observeInterval);
+        if (matchCookie()) clearInterval(observeInterval);
 
         // Observe interactions with relevant items, no matter what kind of interaction it is
         const elements = [banner, ...document.querySelectorAll('.goog-te-menu-frame')];

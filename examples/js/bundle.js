@@ -3703,8 +3703,12 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
     }
   }
 
+  function matchCookie() {
+    return document.cookie.match(googtransRegEx);
+  }
+
   function updateTargetLanguage() {
-    var match = document.cookie.match(googtransRegEx);
+    var match = matchCookie();
 
     if (match && match[1] !== match[2] && pageLanguage !== match[2]) {
       targetLanguage = match[2];
@@ -3802,7 +3806,7 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 
       if (banner) {
         onChange();
-        clearInterval(observeInterval);
+        if (matchCookie()) clearInterval(observeInterval);
 
         // Observe interactions with relevant items, no matter what kind of interaction it is
         var elements = [banner].concat(_toConsumableArray(document.querySelectorAll('.goog-te-menu-frame')));

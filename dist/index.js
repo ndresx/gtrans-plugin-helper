@@ -18,7 +18,7 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
   var observeInterval = null;
   var onChangeTimeout = null;
 
-  var googtransRegEx = /googtrans=\/([a-z-]+)\/([a-z-]+)/i;
+  var googtransRegEx = /googtrans=?[/(]([a-z-]+)[/|]([a-z-]+)/i;
   var gPluginOptions = null;
   var gPluginEl = null;
 
@@ -38,8 +38,12 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
     }
   }
 
+  function matchCookie() {
+    return document.cookie.match(googtransRegEx);
+  }
+
   function updateTargetLanguage() {
-    var match = document.cookie.match(googtransRegEx);
+    var match = matchCookie();
 
     if (match && match[1] !== match[2] && pageLanguage !== match[2]) {
       targetLanguage = match[2];
@@ -90,8 +94,8 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
     var iFrame = (!gPluginEl || banner && banner.offsetHeight) && document.querySelector('.goog-te-menu-frame');
 
     if (iFrame) {
-      var contents = iFrame.contentDocument || iFrame.contentWindow.document;
-      var found = [].concat(_toConsumableArray(contents.querySelectorAll('a'))).filter(function (node) {
+      var links = iFrame.contentDocument.querySelectorAll('a');
+      var found = links.length && [].concat(_toConsumableArray(iFrame.contentDocument.querySelectorAll('a'))).filter(function (node) {
         if (node.value === language) {
           node.click();
           onChange();
@@ -124,7 +128,7 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
     if (!targetLanguage) {
       var banner = getBannerFrame();
 
-      if (!(banner || banner.offsetHeight)) {
+      if (!(banner && banner.offsetHeight)) {
         cleanUp(!gPluginEl);
       }
     }
@@ -137,7 +141,7 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 
       if (banner) {
         onChange();
-        clearInterval(observeInterval);
+        if (matchCookie()) clearInterval(observeInterval);
 
         // Observe interactions with relevant items, no matter what kind of interaction it is
         var elements = [banner].concat(_toConsumableArray(document.querySelectorAll('.goog-te-menu-frame')));
@@ -146,7 +150,7 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
         banner.addEventListener('click', onElementClick);
 
         elements.forEach(function (el) {
-          var contents = el.contentDocument || el.contentWindow.document;
+          var contents = el.contentDocument;
           contents.removeEventListener('click', onElementClick);
           contents.addEventListener('click', onElementClick);
         });
@@ -191,7 +195,7 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 
     // Restore original layout value from string
     gOptions.layout.split('.').forEach(function (el) {
-      if (layout[el]) layout = layout[el];
+      layout = layout[el];
     });
 
     gOptions.layout = layout;
