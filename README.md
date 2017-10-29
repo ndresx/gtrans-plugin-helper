@@ -70,6 +70,7 @@ You can run a local demo of several examples by cloning the repo and running the
 yarn
 yarn start
 ```
+[Live Demo](https://ndresx.github.io/gtrans-plugin-helper/examples/)
 
 ### Links
 In the [Getting Started](#getting-started) section we have used our own select to change the language, but how would it work with links? Very similar if you look at the following example.
